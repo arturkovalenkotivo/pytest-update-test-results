@@ -6,7 +6,7 @@ from _pytest.reports import TestReport
 
 
 def modify_xml(
-    original_xml: Path, retest_results: Dict[TestReport], new_xml: Path
+    original_xml: Path, retest_results: Dict[str, TestReport], new_xml: Path
 ) -> None:
     tree = Et.parse(original_xml)
     root = tree.getroot()
