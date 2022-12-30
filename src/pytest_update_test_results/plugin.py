@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict
 
 from _pytest.reports import TestReport
-from pytest_merge_xml.merge_xml import modify_xml
+from pytest_update_test_results.update_test_results import modify_xml
 
 
 class XMLReportMergerPlugin:
