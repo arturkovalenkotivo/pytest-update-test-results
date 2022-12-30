@@ -8,16 +8,14 @@ from _pytest.reports import TestReport
 def modify_xml(
     original_xml: Path, retest_results: Dict[str, TestReport], new_xml: Path
 ) -> None:
-    """Modifies an XML file containing test results by removing failed test cases that were subsequently
+    """
+    Modifies an XML file containing test results by removing failed test cases that were subsequently
     passed in a retest.
 
-        Parameters:
-            original_xml (Path): Path to the original XML file containing test results.
-            retest_results (Dict[TestReport]): A dictionary mapping test cases to their retest results.
-            new_xml (Path): The path to the new modified XML file that will be created.
-
-        Returns:
-            None. The modified XML file is written to the specified `new_xml` path.
+    :param original_xml: Path to the original XML file containing test results.
+    :param retest_results: A dictionary mapping test cases to their retest results.
+    :param new_xml: The path to the new modified XML file that will be created.
+    :return: None. The modified XML file is written to the specified `new_xml` path.
     """
 
     tree = Et.parse(original_xml)

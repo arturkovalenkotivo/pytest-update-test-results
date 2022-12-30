@@ -5,7 +5,7 @@ from _pytest.reports import TestReport
 from pytest_update_test_results.update_test_results import modify_xml
 
 
-class XMLReportMergerPlugin:
+class UpdateTestResultsPlugin:
     """Class that collects test items and updates an existing XML file with the new test results"""
 
     def __init__(self, original_xmlfile: Path):
@@ -28,14 +28,14 @@ def pytest_addoption(parser):
     # pytest has a note to keep conftest.py at the root dir in order to load added options.
     # http://pytest.org/latest/plugins.html?highlight=hooks#plugin-discovery-order-at-tool-startup
     parser.addoption(
-        "--merge-xml",
+        "--update-xml",
         action="store",
         help="Enable original xml overwrite based on flaky tests rerun results",
     )
 
 
 def pytest_configure(config):
-    original_xmlfile = config.getoption("--merge-xml")
+    original_xmlfile = config.getoption("--update-xml")
     if original_xmlfile:
         report = XMLReportMergerPlugin(Path(original_xmlfile))
         config.pluginmanager.register(report)
