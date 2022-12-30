@@ -37,5 +37,5 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     original_xmlfile = config.getoption("--update-xml")
     if original_xmlfile:
-        report = XMLReportMergerPlugin(Path(original_xmlfile))
+        report = UpdateTestResultsPlugin(Path(original_xmlfile))
         config.pluginmanager.register(report)
