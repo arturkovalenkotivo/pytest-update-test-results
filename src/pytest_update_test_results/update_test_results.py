@@ -1,3 +1,4 @@
+import shutil
 import xml.etree.ElementTree as Et
 from pathlib import Path
 from typing import Dict
@@ -5,9 +6,7 @@ from typing import Dict
 from _pytest.reports import TestReport
 
 
-def modify_xml(
-    original_xml: Path, retest_results: Dict[str, TestReport], new_xml: Path
-) -> None:
+def modify_xml(original_xml: Path, retest_results: Dict[str, TestReport], new_xml: Path) -> None:
     """
     Modifies an XML file containing test results by removing failed test cases that were subsequently
     passed in a retest.
@@ -21,20 +20,30 @@ def modify_xml(
     tree = Et.parse(original_xml)
     root = tree.getroot()
     testsuite = root.find("testsuite")
-    previous_run_failure_count = int(testsuite.attrib["failures"])
+    original_failure_count = retest_failure_count = int(testsuite.attrib["failures"])
+    original_error_count = retest_error_count = int(testsuite.attrib["errors"])
 
-    results_passed = [
-        result.location[2]
-        for result in retest_results.values()
-        if result.outcome == "passed"
-    ]
+    succeed_in_retest = {
+        result.location[2] for result in retest_results.values() if result.outcome == "passed"
+    }
 
     for testcase in testsuite:
         testcase_name = testcase.attrib["name"]
-        for failure in testcase.findall("failure"):
-            if testcase_name in results_passed:
-                previous_run_failure_count -= 1
+        if testcase_name in succeed_in_retest:
+            failure = testcase.find("failure")
+            if failure is not None:
+                retest_failure_count -= 1
                 testcase.remove(failure)
+                continue
+            error = testcase.find("error")
+            if error is not None:
+                retest_error_count -= 1
+                testcase.remove(error)
 
-    testsuite.attrib["failures"] = str(previous_run_failure_count)
-    tree.write(new_xml, encoding="utf-8", xml_declaration=True)
+    # Only writes a new XML if some test outcome has changed
+    if retest_failure_count < original_failure_count or retest_error_count < original_error_count:
+        testsuite.attrib["failures"] = str(retest_failure_count)
+        testsuite.attrib["errors"] = str(retest_error_count)
+        tree.write(new_xml, encoding="utf-8", xml_declaration=True)
+    elif original_xml != new_xml:
+        shutil.copy(original_xml, new_xml)
