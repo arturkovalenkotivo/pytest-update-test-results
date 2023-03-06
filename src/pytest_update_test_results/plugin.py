@@ -17,20 +17,15 @@ class UpdateTestResultsPlugin:
             self.reports[report.nodeid] = report
 
     def pytest_sessionfinish(self, session, exitstatus):
-        modify_xml(
-            Path(self.original_xmlfile),
-            self.reports,
-            Path(self.original_xmlfile),
-        )
+        modify_xml(Path(self.original_xmlfile), self.reports, Path(self.original_xmlfile))
 
 
 def pytest_addoption(parser):
-    # pytest has a note to keep conftest.py at the root dir in order to load added options.
-    # http://pytest.org/latest/plugins.html?highlight=hooks#plugin-discovery-order-at-tool-startup
     parser.addoption(
         "--update-xml",
         action="store",
-        help="Enable original xml overwrite based on flaky tests rerun results",
+        help="Overwrites a junit-xml report by changing failed/error outcomes "
+        "to 'passed' in case they succeed.",
     )
 
 
