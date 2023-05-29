@@ -38,7 +38,7 @@ tests were constantly popping up.
 
 Then, we tried [pytest-rerunfailures] (which automatically
 re-run all test failures), but that didn't work either, due the way
-[it deals with session fixtures](1).
+[it deals with session fixtures][1].
 
 So we opted to develop this plugin to re-run only the failed tests from
 the previous run in a new pytest execution (using pytest built-in option `--last-failed`) and update the XML report. Besides working just fine with
