@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite errors="1" failures="1" hostname="BRWS009" name="pytest" skipped="0" tests="2" time="0.035" timestamp="2023-18-09T19:44:18.458004">
+  <testcase classname="test.test_flaky" name="test_passed" time="0.000" />
+  <testcase classname="test.test_pytest_update_test_results" name="test_error_on_tear_down" time="0.000">
+    <failure message="ZeroDivisionError: division by zero">tear_down_error = None def test_big_error_outcome(tear_down_error): print("HEllo") > 1 /0 E ZeroDivisionError: division by zero test\test_pytest_update_test_results.py:212: ZeroDivisionError</failure>
+  </testcase>
+  <testcase classname="test.test_pytest_update_test_results" name="test_error_on_tear_down" time="0.000">
+    <error message="failed on teardown with &quot;RuntimeError: fake&quot;">@pytest.fixture def tear_down_error(): yield > raise RuntimeError("fake") E RuntimeError: fake test\test_pytest_update_test_results.py:207: RuntimeError</error>
+  </testcase>
+  </testsuite>
+</testsuites>

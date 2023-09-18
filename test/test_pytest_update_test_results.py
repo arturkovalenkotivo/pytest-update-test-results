@@ -178,3 +178,25 @@ def test_duplicated_test_names(datadir: Path) -> None:
     testsuite_el = root_el.find("testsuite")
     assert testsuite_el.attrib["failures"] == "0"
     assert len(list(testsuite_el.iter("failure"))) == 0
+
+def test_error_on_teardown(datadir: Path) -> None:
+    retest_results = {
+        "test_error_on_teardown": TestReport(
+            nodeid="test/test_pytest_update_test_results.py::test_error_on_tear_down",
+            outcome="passed",
+            location=("test/test_pytest_update_test_results.py", 8, "test_error_on_tear_down"),
+            keywords={},
+            longrepr=None,
+            when="call",
+        )
+    }
+
+    original_junit_xml = datadir / "error_on_teardown.xml"
+    modified_junit_xml = datadir / "error_on_teardown.retest.xml"
+    modify_xml(original_junit_xml, retest_results, modified_junit_xml)    
+
+    et = ET.parse(modified_junit_xml)
+    root_el = et.getroot()
+    testsuite_el = root_el.find("testsuite")
+    assert testsuite_el.attrib["errors"] == "0"
+    assert testsuite_el.attrib["failures"] == "0"
