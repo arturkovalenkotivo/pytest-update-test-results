@@ -53,6 +53,13 @@ some flaky tests can occur due high CPU/IO usage. In the re-run
 we can reduce number of parallel processes to make more resources
 available for each test.
 
+## At ESSS
+
+To enable this for our internal projects:
+
+1. Add `test_py_retest: True` to your project's `spec` file.
+2. Add `pytest-update-test-results` dependency. 
+
 [flaky]: https://github.com/box/flaky
 [pytest-rerunfailures]: https://github.com/pytest-dev/pytest-rerunfailures
 [1]: https://github.com/pytest-dev/pytest-rerunfailures/issues/51
