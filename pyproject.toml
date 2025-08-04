@@ -3,3 +3,7 @@ testpaths = "test"
 
 [tool.black]
 line-length = 90
+
+[build-system]
+requires = ["setuptools>=42", "setuptools_scm>=6.2"]
+build-backend = "setuptools.build_meta"
